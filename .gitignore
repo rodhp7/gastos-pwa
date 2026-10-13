@@ -1,0 +1,15 @@
+# Configuración local de Claude Code (apunta a archivos de esta máquina)
+.claude/
+
+# Sistema y editores
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
+.idea/
+
+# Dependencias, si algún día se usa npm
+node_modules/
+
+# Copias manuales del proyecto
+*.zip

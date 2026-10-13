@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+<title>Nexo — Finanzas personales</title>
+
+<meta name="description" content="Nexo: organiza tus gastos, ingresos, presupuesto, ahorro y metas." />
+
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#F5F6F8" id="meta-theme-color" />
+
+<script>
+/* Se aplica el tema antes de pintar la primera vez. Si se hiciera más tarde,
+   al abrir la app en modo oscuro se vería un destello blanco. */
+(function () {
+  var COLOR_BARRA = { claro: "#F5F6F8", oscuro: "#0E1116" };
+  var preferencia;
+  try { preferencia = localStorage.getItem("nexo-tema"); } catch (e) { preferencia = null; }
+
+  var raiz = document.documentElement;
+  if (preferencia === "claro" || preferencia === "oscuro") {
+    raiz.setAttribute("data-theme", preferencia === "oscuro" ? "dark" : "light");
+  } else {
+    raiz.removeAttribute("data-theme");
+  }
+
+  var oscuroActivo = preferencia === "oscuro" ||
+    (preferencia !== "claro" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  var meta = document.getElementById("meta-theme-color");
+  if (meta) meta.setAttribute("content", oscuroActivo ? COLOR_BARRA.oscuro : COLOR_BARRA.claro);
+})();
+</script>
+
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<!-- "default": con "black-translucent" iOS pinta la hora y la batería en
+     blanco, invisibles sobre el fondo claro de la app. -->
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Nexo" />
+
+<link rel="icon" href="icons/icon-192.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<div id="connection-status">Sin conexión · modo offline</div>
+
+<div id="install-banner">
+  <span id="install-text">
+    Instala esta app en tu pantalla de inicio para usarla como una app nativa.
+  </span>
+
+  <button id="install-btn">
+    Instalar
+  </button>
+</div>
+
+<div id="page">
+
+  <div id="phone">
+
+    <header id="top-nav">
+      <div class="top-brand">
+        <p class="top-title">Nexo</p>
+        <p class="top-subtitle">Control personal</p>
+      </div>
+      <div class="top-nav-actions">
+        <button class="top-add-btn top-add-expense" id="top-add-expense" aria-label="Registrar gasto" title="Registrar gasto">Gasto</button>
+        <button class="top-add-btn top-add-income" id="top-add-income" aria-label="Registrar ingreso" title="Registrar ingreso">Ingreso</button>
+      </div>
+    </header>
+
+    <div id="screen-area"></div>
+
+    <nav id="bottom-tabs" aria-label="Navegación principal">
+      <button type="button" class="tab-item" data-top-screen="home" aria-label="Inicio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg>
+        <span>Inicio</span>
+      </button>
+      <button type="button" class="tab-item" data-top-screen="movimientos" aria-label="Movimientos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h11"/><path d="M4 12h16"/><path d="M4 17h8"/></svg>
+        <span>Movimientos</span>
+      </button>
+      <button type="button" class="tab-item" data-top-screen="cuentas" aria-label="Cuentas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16"/><path d="M4 10 12 4l8 6"/><path d="M6 10v8"/><path d="M12 10v8"/><path d="M18 10v8"/><path d="M4 20h16"/></svg>
+        <span>Cuentas</span>
+      </button>
+      <button type="button" class="tab-item" data-top-screen="analisis" aria-label="Análisis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V10"/><path d="M12 20V4"/><path d="M19 20v-6"/></svg>
+        <span>Análisis</span>
+      </button>
+      <div class="top-menu tab-more">
+        <button type="button" class="tab-item" id="top-menu-btn" aria-label="Más opciones" aria-expanded="false" aria-haspopup="menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg>
+          <span>Más</span>
+        </button>
+        <div class="top-menu-dropdown" id="top-menu-dropdown" role="menu">
+          <button type="button" class="top-menu-item" role="menuitem" data-top-screen="presupuestos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg><span>Presupuestos</span></button>
+          <button type="button" class="top-menu-item" role="menuitem" data-top-screen="pendientes"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Pagos pendientes</span></button>
+          <button type="button" class="top-menu-item" role="menuitem" data-top-screen="deudas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h13"/><path d="m16 3 4 4-4 4"/><path d="M17 17H4"/><path d="m8 13-4 4 4 4"/></svg><span>Deudas</span></button>
+          <button type="button" class="top-menu-item" role="menuitem" data-top-screen="metas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg><span>Metas de ahorro</span></button>
+          <button type="button" class="top-menu-item" role="menuitem" data-top-screen="meses"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Calendario</span></button>
+          <div class="top-menu-sep" role="separator"></div>
+          <button type="button" class="top-menu-item" role="menuitem" data-account-open><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Cuenta y sincronización</span></button>
+          <button type="button" class="top-menu-item" role="menuitem" data-top-screen="configuracion" id="top-configuracion-item"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span>Configuración</span></button>
+        </div>
+      </div>
+    </nav>
+
+    <div id="save-toast">
+      No se pudo guardar. Revisa el espacio disponible en tu dispositivo.
+    </div>
+
+  </div>
+
+</div>
+
+<script src="config.js"></script>
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="date-utils.js"></script>
+<script src="finance-core.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+
+</body>
+</html>
