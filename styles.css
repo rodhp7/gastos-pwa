@@ -33,6 +33,7 @@
   --primary-soft: #E9EEF5;
   --primary-contrast: #FFFFFF;
   --surface-translucent: rgba(255,255,255,0.92);
+  --barra-estado: #072146;      /* franja bajo la hora del iPhone */
 
   /* Semánticos */
   --success: #0A7D55;           /* #0B8A5F quedaba en 4.4:1 sobre blanco */
@@ -114,6 +115,7 @@
     --primary-soft: #122A44;
     --primary-contrast: #0E1116;
     --surface-translucent: rgba(22,26,33,0.92);
+    --barra-estado: #0E1116;
 
     --success: #3DD68C;
     --success-soft: #10291F;
@@ -151,6 +153,7 @@
   --primary-soft: #122A44;
   --primary-contrast: #0E1116;
   --surface-translucent: rgba(22,26,33,0.92);
+  --barra-estado: #0E1116;
 
   --success: #3DD68C;
   --success-soft: #10291F;
@@ -178,6 +181,8 @@ body {
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* Sin zoom con doble toque; el pellizco se bloquea en 18-navigation.js. */
+  touch-action: manipulation;
 }
 
 body {
@@ -281,10 +286,29 @@ input[type="number"]::-webkit-inner-spin-button {
 
   background: var(--parchment);
 
+  /* Arriba, exactamente el alto de la zona de la hora y la batería (0 donde
+     no la hay): la cabecera empieza justo debajo de la franja de estado. */
   padding:
-    max(16px, env(safe-area-inset-top))
+    env(safe-area-inset-top, 0px)
     0
-    env(safe-area-inset-bottom);
+    env(safe-area-inset-bottom, 0px);
+}
+
+/* Franja bajo la hora, la batería y las notificaciones del iPhone. La app se
+   extiende bajo la barra de estado (viewport-fit=cover + black-translucent) y
+   esta franja fija la tapa siempre, también al desplazarse; sin ella, la
+   cabecera y el contenido pasaban por detrás de la hora. Mide 0 en los
+   dispositivos sin esa zona. */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 100;
+  background: var(--barra-estado);
+  pointer-events: none;
 }
 
 #phone {
@@ -330,7 +354,8 @@ input[type="number"]::-webkit-inner-spin-button {
 
 #top-nav {
   position: sticky;
-  top: 0;
+  /* Se pega debajo de la franja de estado, no detrás de la hora. */
+  top: env(safe-area-inset-top, 0px);
   z-index: 50;
   display: flex;
   align-items: center;

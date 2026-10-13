@@ -1,5 +1,5 @@
 {
-  "name": "Nexo — Finanzas personales",
+  "name": "Nexo",
   "short_name": "Nexo",
   "description": "Gastos, ingresos, presupuestos, cuentas, deudas y metas de ahorro.",
   "start_url": "./index.html",
@@ -7,7 +7,7 @@
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#F5F6F8",
-  "theme_color": "#F5F6F8",
+  "theme_color": "#072146",
   "lang": "es",
   "categories": ["finance", "productivity"],
   "icons": [

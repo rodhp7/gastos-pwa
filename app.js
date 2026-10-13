@@ -7394,6 +7394,17 @@ document.addEventListener("click", function (event) {
   closeSettingsItemMenus(event.target);
 });
 
+/* Sin zoom. iOS no siempre respeta user-scalable=no del viewport, así que el
+   pellizco se bloquea también aquí: los eventos gesture* son los de Safari y
+   el touchmove con dos dedos cubre al resto. El doble toque lo evita
+   touch-action: manipulation en styles.css. */
+["gesturestart", "gesturechange", "gestureend"].forEach(function (tipo) {
+  document.addEventListener(tipo, function (event) { event.preventDefault(); }, { passive: false });
+});
+document.addEventListener("touchmove", function (event) {
+  if (event.touches && event.touches.length > 1) event.preventDefault();
+}, { passive: false });
+
 /* Si el usuario hace scroll (en cualquier contenedor) mientras un menú de
    categoría/subcategoría está abierto, se cierra: al ser position:fixed,
    no acompaña el desplazamiento de la lista y podría quedar "flotando"
@@ -7661,7 +7672,8 @@ document
 ========================================================= */
 
 var TEMA_KEY = "nexo-tema";
-var TEMA_COLOR_BARRA = { claro: "#F5F6F8", oscuro: "#0E1116" };
+/* Mismo color que la franja de la barra de estado (--barra-estado). */
+var TEMA_COLOR_BARRA = { claro: "#072146", oscuro: "#0E1116" };
 
 function temaGuardado() {
   try {

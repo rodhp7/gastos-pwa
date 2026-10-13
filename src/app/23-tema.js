@@ -8,7 +8,8 @@
 ========================================================= */
 
 var TEMA_KEY = "nexo-tema";
-var TEMA_COLOR_BARRA = { claro: "#F5F6F8", oscuro: "#0E1116" };
+/* Mismo color que la franja de la barra de estado (--barra-estado). */
+var TEMA_COLOR_BARRA = { claro: "#072146", oscuro: "#0E1116" };
 
 function temaGuardado() {
   try {

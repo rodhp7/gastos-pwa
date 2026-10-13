@@ -1,4 +1,4 @@
-const CACHE_NAME = "nexo-v66-dialogos";
+const CACHE_NAME = "nexo-v67-iphone-icono";
 const APP_SHELL = [
   "./", "./index.html", "./config.js", "./date-utils.js", "./app.js", "./finance-core.js", "./supabase-config.js", "./auth.js",
   "./styles.css", "./manifest.json", "./icons/icon-192.png",

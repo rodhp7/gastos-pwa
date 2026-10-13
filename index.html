@@ -2,20 +2,23 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<!-- Sin zoom: la app se maneja como una nativa. iOS ignora user-scalable en
+     algunos casos, así que el pellizco también se bloquea en 18-navigation.js. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 
-<title>Nexo — Finanzas personales</title>
+<title>Nexo</title>
+<meta name="application-name" content="Nexo" />
 
 <meta name="description" content="Nexo: organiza tus gastos, ingresos, presupuesto, ahorro y metas." />
 
 <link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#F5F6F8" id="meta-theme-color" />
+<meta name="theme-color" content="#072146" id="meta-theme-color" />
 
 <script>
 /* Se aplica el tema antes de pintar la primera vez. Si se hiciera más tarde,
    al abrir la app en modo oscuro se vería un destello blanco. */
 (function () {
-  var COLOR_BARRA = { claro: "#F5F6F8", oscuro: "#0E1116" };
+  var COLOR_BARRA = { claro: "#072146", oscuro: "#0E1116" };
   var preferencia;
   try { preferencia = localStorage.getItem("nexo-tema"); } catch (e) { preferencia = null; }
 
@@ -36,9 +39,11 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<!-- "default": con "black-translucent" iOS pinta la hora y la batería en
-     blanco, invisibles sobre el fondo claro de la app. -->
-<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<!-- La app ocupa también la zona de la hora y la batería, y la cubre con una
+     franja propia del color de la marca (body::before en styles.css), con el
+     texto del sistema en blanco. iOS guarda este valor al añadir la app a la
+     pantalla de inicio, así que la maquetación funciona con cualquiera. -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Nexo" />
 
 <link rel="icon" href="icons/icon-192.png" />
